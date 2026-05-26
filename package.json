@@ -1,0 +1,20 @@
+{
+  "name": "basic-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Vincensius Anthony",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
