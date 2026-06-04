@@ -1,0 +1,448 @@
+{
+  "info": {
+    "_postman_id": "72ba8f9b-a4f4-4e08-98ad-0faff329406c",
+    "name": "basic-rest-api",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55117058",
+    "_collection_link": "https://go.postman.co/collection/55117058-72ba8f9b-a4f4-4e08-98ad-0faff329406c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get-healthCheck",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "health"
+          ]
+        },
+        "description": "## Health Check\n\nChecks whether the API server is up and running.\n\n**Endpoint:** `GET /health`  \n**Base URL:** `http://localhost:5000`\n\n### Request\n\nNo request body or query parameters are required.\n\n| Property | Value |\n| --- | --- |\n| Method | GET |\n| URL | `http://localhost:5000/health` |\n| Auth | None |\n| Body | None |\n\n### Response\n\nA successful response returns HTTP **200 OK**, indicating the server is healthy and accepting requests.\n\n**Response fields:**\n\n| Field | Type | Description |\n| --- | --- | --- |\n| `status` | string | Server status, always `\"ok\"` when healthy |\n| `timestamp` | string | ISO 8601 date-time of when the request was handled |\n| `uptime` | string | How long the server has been running (in seconds) |\n\n### Test\n\nThis request includes an automated test that verifies the response status code is `200`."
+      },
+      "response": {
+        "status": "ok",
+        "timestamp": "2026-06-04T10:19:11.559Z",
+        "uptime": "2047 detik"
+      }
+    },
+    {
+      "name": "Get-apiInfo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "Returns metadata about the API, including its name, version, runtime environment, Node.js version, and a list of all available endpoints with their HTTP methods, paths, and descriptions.\n\n## Request\n\n**Method:** GET  \n**URL:** `http://localhost:5000/api/info`\n\nNo request parameters, headers, or body are required.\n\n## Response\n\n**Status:** `200 OK`  \n**Content-Type:** `application/json`\n\n| Field | Type | Description |\n|---|---|---|\n| `name` | string | The name of the API project |\n| `version` | string | The current version of the API |\n| `environment` | string | The runtime environment (e.g. `development`, `production`) |\n| `node` | string | The Node.js version the server is running on |\n| `endpoints` | array | List of available API endpoints |\n| `endpoints[].method` | string | HTTP method for the endpoint |\n| `endpoints[].path` | string | URL path for the endpoint |\n| `endpoints[].description` | string | Short description of what the endpoint does |\n\n## Example Response\n\n```json\n{\n  \"name\": \"basic-rest-api\",\n  \"version\": \"1.0.0\",\n  \"environment\": \"development\",\n  \"node\": \"v22.18.0\",\n  \"endpoints\": [\n    { \"method\": \"GET\", \"path\": \"/health\", \"description\": \"Health check\" },\n    { \"method\": \"GET\", \"path\": \"/api/info\", \"description\": \"API information\" },\n    { \"method\": \"GET\", \"path\": \"/api/echo/:msg\", \"description\": \"Echo a message\" }\n  ]\n}\n```"
+      },
+      "response": {
+        "name": "basic-rest-api",
+        "version": "1.0.0",
+        "environment": "development",
+        "node": "v22.18.0",
+        "endpoints": [
+          {
+            "method": "GET",
+            "path": "/health",
+            "description": "Health check"
+          },
+          {
+            "method": "GET",
+            "path": "/api/info",
+            "description": "API information"
+          },
+          {
+            "method": "GET",
+            "path": "/api/echo/:msg",
+            "description": "Echo a message"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-apiEchomsg",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "## Echo Message\n\nReturns the message provided in the URL path parameter, optionally converted to uppercase.\n\n**Endpoint:** `GET /api/echo/:msg`\n**Base URL:** `http://localhost:5000`\n\n---\n\n## Request\n\n### URL Parameter\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `msg` | string | Yes | The message to echo back. Cannot be empty. |\n\n### Query Parameter\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `upper` | boolean | No | If set to `true`, the echoed message is returned in uppercase. Defaults to `false`. |\n\n### Example URLs\n\n- `GET http://localhost:5000/api/echo/hello` — echoes `\"hello\"`\n- `GET http://localhost:5000/api/echo/hello?upper=true` — echoes `\"HELLO\"`\n\n---\n\n## Response\n\n### Success — `200 OK`\n\n| Field | Type | Description |\n| --- | --- | --- |\n| `original` | string | The original message as provided in the URL parameter |\n| `echoed` | string | The echoed message (uppercased if `upper=true`) |\n| `upper` | boolean | Whether uppercase conversion was applied |\n| `timestamp` | string | ISO 8601 date-time of when the request was handled |\n\n**Example:**\n```json\n{\n  \"original\": \"hello\",\n  \"echoed\": \"HELLO\",\n  \"upper\": true,\n  \"timestamp\": \"2024-01-01T00:00:00.000Z\"\n}\n```\n\n### Error — `400 Bad Request`\n\nReturned when the `:msg` parameter is empty.\n\n```json\n{\n  \"error\": \"Bad Request\",\n  \"message\": \"Parameter :msg tidak boleh kosong.\"\n}\n```"
+      },
+      "response": {
+        "original": "HelloWorld",
+        "echoed": "HelloWorld",
+        "upper": false,
+        "timestamp": "2026-06-04T10:19:23.455Z"
+      }
+    },
+    {
+      "name": "Get-apiEchouppercase",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "Echoes back a message provided as a URL path parameter, with optional uppercase transformation.\n\n**Endpoint:** `GET /api/echo/:msg`\n\n## Path Parameters\n\n| Name | Required | Description |\n| --- | --- | --- |\n| `msg` | Yes | The message to echo back. Must not be empty or blank. |\n\n## Query Parameters\n\n| Name | Required | Description |\n| --- | --- | --- |\n| `upper` | No | Set to `true` to return the echoed message in uppercase. Any other value (or omitting it) returns the message as-is. |\n\n## Response\n\n**200 OK**\n\n``` json\n{\n  \"original\": \"HelloWorld\",\n  \"echoed\": \"HELLOWORLD\",\n  \"upper\": true,\n  \"timestamp\": \"2026-06-04T08:57:58.750Z\"\n}\n\n ```\n\n**400 Bad Request** — when `:msg` is empty or whitespace:\n\n``` json\n{\n  \"error\": \"Bad Request\",\n  \"message\": \"Parameter :msg tidak boleh kosong.\"\n}\n\n ```"
+      },
+      "response": {
+        "original": "HelloWorld",
+        "echoed": "HELLOWORLD",
+        "upper": true,
+        "timestamp": "2026-06-04T10:19:27.564Z"
+      }
+    },
+    {
+      "name": "Get-notFound",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "Tests the API's handling of requests to undefined or non-existent routes. Sending a GET request to a route that does not exist (e.g. `/api/tidakada`) should return a `404 Not Found` response with a JSON error body containing:\n\n- `error.code`: `\"NOT_FOUND\"`\n    \n- `error.message`: a human-readable message indicating the route was not found\n    \n- `error.hint`: a suggestion to visit `GET /api/docs` for API documentation\n    \n\nUse this request to verify that the global 404 handler is working correctly."
+      },
+      "response": {
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Route GET /api/tidakada tidak ditemukan.",
+          "hint": "Kunjungi GET /api/docs untuk dokumentasi API."
+        }
+      }
+    },
+    {
+      "name": "Get-allTasks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "Retrieves a list of all tasks.\n\n**Endpoint:** `GET /api/v1/tasks`\n\n**Query Parameters**\n\n| Parameter | Type | Required | Description |\n|-----------|------|----------|-------------|\n| `status` | string | No | Filter tasks by status. Accepted values: `todo`, `in_progress`, `done` |\n| `priority` | string | No | Filter tasks by priority. Accepted values: `low`, `medium`, `high` |\n| `limit` | integer | No | Maximum number of tasks to return per page |\n| `offset` | integer | No | Number of tasks to skip (for pagination) |\n| `sort` | string | No | Field to sort by (e.g. `createdAt`) |\n| `order` | string | No | Sort direction. Accepted values: `asc`, `desc` |\n\n**Response**\n\nReturns a JSON object with a `data` array of task objects and a `pagination` object.\n\nEach task object contains:\n- `id` — Unique task identifier\n- `title` — Task title\n- `status` — Current status (`todo`, `in_progress`, `done`)\n- `priority` — Priority level (`low`, `medium`, `high`)\n- `createdAt` — ISO 8601 timestamp of creation\n- `updatedAt` — ISO 8601 timestamp of last update\n\nThe `pagination` object contains:\n- `total` — Total number of tasks matching the query\n- `limit` — Applied limit\n- `offset` — Applied offset\n- `hasNext` — Whether a next page exists\n- `hasPrev` — Whether a previous page exists\n- `nextOffset` — Offset value for the next page\n- `prevOffset` — Offset value for the previous page\n\n**Example Response**\n```json\n{\n  \"data\": [\n    {\n      \"id\": 5,\n      \"title\": \"Belajar GraphQL\",\n      \"status\": \"todo\",\n      \"priority\": \"low\",\n      \"createdAt\": \"2024-01-14T00:00:00.000Z\",\n      \"updatedAt\": \"2024-01-14T00:00:00.000Z\"\n    }\n  ],\n  \"pagination\": {\n    \"total\": 5,\n    \"limit\": null,\n    \"offset\": null,\n    \"hasNext\": false,\n    \"hasPrev\": false,\n    \"nextOffset\": null,\n    \"prevOffset\": null\n  }\n}\n```"
+      },
+      "response": {
+        "data": [
+          {
+            "id": 5,
+            "title": "Belajar GraphQL",
+            "status": "todo",
+            "priority": "low",
+            "createdAt": "2024-01-14T00:00:00.000Z",
+            "updatedAt": "2024-01-14T00:00:00.000Z"
+          },
+          {
+            "id": 4,
+            "title": "Setup PostgreSQL",
+            "status": "todo",
+            "priority": "medium",
+            "createdAt": "2024-01-13T00:00:00.000Z",
+            "updatedAt": "2024-01-13T00:00:00.000Z"
+          },
+          {
+            "id": 3,
+            "title": "Desain REST API",
+            "status": "todo",
+            "priority": "medium",
+            "createdAt": "2024-01-12T00:00:00.000Z",
+            "updatedAt": "2024-01-12T00:00:00.000Z"
+          },
+          {
+            "id": 2,
+            "title": "Belajar Express",
+            "status": "in_progress",
+            "priority": "high",
+            "createdAt": "2024-01-11T00:00:00.000Z",
+            "updatedAt": "2024-01-11T00:00:00.000Z"
+          },
+          {
+            "id": 1,
+            "title": "Setup project",
+            "status": "done",
+            "priority": "high",
+            "createdAt": "2024-01-10T00:00:00.000Z",
+            "updatedAt": "2024-01-10T00:00:00.000Z"
+          }
+        ],
+        "pagination": {
+          "total": 5,
+          "limit": null,
+          "offset": null,
+          "hasNext": false,
+          "hasPrev": false,
+          "nextOffset": null,
+          "prevOffset": null
+        }
+      }
+    },
+    {
+      "name": "Get-allTasks-todo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "## Get All Tasks — Filtered by Status: `todo`\n\nRetrieves a list of all tasks that have a status of **`todo`**. This endpoint is useful for fetching only the pending/unstarted tasks from the task list.\n\n---\n\n## HTTP Method & URL\n\n```\nGET http://localhost:5000/api/v1/tasks?status=todo\n```\n\n---\n\n## Query Parameters\n\n| Name | Type | Description | Example |\n|------|------|-------------|---------|\n| `status` | `string` | Filters tasks by their current status. Use `todo` to retrieve only tasks that have not been started yet. | `todo` |\n\n---\n\n## Sample Successful Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"data\": [\n    {\n      \"id\": 5,\n      \"title\": \"Belajar GraphQL\",\n      \"status\": \"todo\",\n      \"priority\": \"low\",\n      \"createdAt\": \"2024-01-14T00:00:00.000Z\",\n      \"updatedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n      \"id\": 4,\n      \"title\": \"Setup PostgreSQL\",\n      \"status\": \"todo\",\n      \"priority\": \"medium\",\n      \"createdAt\": \"2024-01-13T00:00:00.000Z\",\n      \"updatedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n      \"id\": 3,\n      \"title\": \"Desain REST API\",\n      \"status\": \"todo\",\n      \"priority\": \"medium\",\n      \"createdAt\": \"2024-01-12T00:00:00.000Z\",\n      \"updatedAt\": \"2024-01-12T00:00:00.000Z\"\n    }\n  ],\n  \"pagination\": {\n    \"total\": 3,\n    \"limit\": null,\n    \"offset\": null,\n    \"hasNext\": false,\n    \"hasPrev\": false,\n    \"nextOffset\": null,\n    \"prevOffset\": null\n  }\n}\n```\n\n### Response Fields\n\n**`data[]` — Array of task objects**\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `id` | `integer` | Unique identifier for the task. |\n| `title` | `string` | The title or name of the task. |\n| `status` | `string` | Current status of the task. Will always be `\"todo\"` for this filtered request. |\n| `priority` | `string` | Priority level of the task. Possible values: `low`, `medium`, `high`. |\n| `createdAt` | `string (ISO 8601)` | Timestamp indicating when the task was created. |\n| `updatedAt` | `string (ISO 8601)` | Timestamp indicating when the task was last updated. |\n\n**`pagination` — Pagination metadata**\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `total` | `integer` | Total number of tasks matching the filter. |\n| `limit` | `integer \\| null` | Maximum number of tasks returned per page. `null` if no limit is applied. |\n| `offset` | `integer \\| null` | Number of tasks skipped. `null` if no offset is applied. |\n| `hasNext` | `boolean` | Indicates whether there is a next page of results. |\n| `hasPrev` | `boolean` | Indicates whether there is a previous page of results. |\n| `nextOffset` | `integer \\| null` | Offset value to use for fetching the next page. `null` if no next page exists. |\n| `prevOffset` | `integer \\| null` | Offset value to use for fetching the previous page. `null` if no previous page exists. |"
+      },
+      "response": {
+        "data": [
+          {
+            "id": 5,
+            "title": "Belajar GraphQL",
+            "status": "todo",
+            "priority": "low",
+            "createdAt": "2024-01-14T00:00:00.000Z",
+            "updatedAt": "2024-01-14T00:00:00.000Z"
+          },
+          {
+            "id": 4,
+            "title": "Setup PostgreSQL",
+            "status": "todo",
+            "priority": "medium",
+            "createdAt": "2024-01-13T00:00:00.000Z",
+            "updatedAt": "2024-01-13T00:00:00.000Z"
+          },
+          {
+            "id": 3,
+            "title": "Desain REST API",
+            "status": "todo",
+            "priority": "medium",
+            "createdAt": "2024-01-12T00:00:00.000Z",
+            "updatedAt": "2024-01-12T00:00:00.000Z"
+          }
+        ],
+        "pagination": {
+          "total": 3,
+          "limit": null,
+          "offset": null,
+          "hasNext": false,
+          "hasPrev": false,
+          "nextOffset": null,
+          "prevOffset": null
+        }
+      }
+    },
+    {
+      "name": "Get-allTasks-page2",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": [
+          {
+            "id": 3,
+            "title": "Desain REST API",
+            "status": "todo",
+            "priority": "medium",
+            "createdAt": "2024-01-12T00:00:00.000Z",
+            "updatedAt": "2024-01-12T00:00:00.000Z"
+          },
+          {
+            "id": 2,
+            "title": "Belajar Express",
+            "status": "in_progress",
+            "priority": "high",
+            "createdAt": "2024-01-11T00:00:00.000Z",
+            "updatedAt": "2024-01-11T00:00:00.000Z"
+          }
+        ],
+        "pagination": {
+          "total": 5,
+          "limit": 2,
+          "offset": 2,
+          "hasNext": true,
+          "hasPrev": true,
+          "nextOffset": 4,
+          "prevOffset": 0
+        }
+      }
+    },
+    {
+      "name": "Get-allTasks-asc",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": [
+          {
+            "id": 2,
+            "title": "Belajar Express",
+            "status": "in_progress",
+            "priority": "high",
+            "createdAt": "2024-01-11T00:00:00.000Z",
+            "updatedAt": "2024-01-11T00:00:00.000Z"
+          },
+          {
+            "id": 5,
+            "title": "Belajar GraphQL",
+            "status": "todo",
+            "priority": "low",
+            "createdAt": "2024-01-14T00:00:00.000Z",
+            "updatedAt": "2024-01-14T00:00:00.000Z"
+          },
+          {
+            "id": 3,
+            "title": "Desain REST API",
+            "status": "todo",
+            "priority": "medium",
+            "createdAt": "2024-01-12T00:00:00.000Z",
+            "updatedAt": "2024-01-12T00:00:00.000Z"
+          },
+          {
+            "id": 4,
+            "title": "Setup PostgreSQL",
+            "status": "todo",
+            "priority": "medium",
+            "createdAt": "2024-01-13T00:00:00.000Z",
+            "updatedAt": "2024-01-13T00:00:00.000Z"
+          },
+          {
+            "id": 1,
+            "title": "Setup project",
+            "status": "done",
+            "priority": "high",
+            "createdAt": "2024-01-10T00:00:00.000Z",
+            "updatedAt": "2024-01-10T00:00:00.000Z"
+          }
+        ],
+        "pagination": {
+          "total": 5,
+          "limit": null,
+          "offset": null,
+          "hasNext": false,
+          "hasPrev": false,
+          "nextOffset": null,
+          "prevOffset": null
+        }
+      }
+    },
+    {
+      "name": "Post-newTask",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "title": "Task Baru",
+          "priority": "high",
+          "status": "todo",
+          "createdAt": "2026-06-04T10:02:02.890Z",
+          "updatedAt": "2026-06-04T10:02:02.890Z"
+        }
+      }
+    },
+    {
+      "name": "Post-newTask-noTitle",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Data yang dikirim tidak valid.",
+          "details": [
+            {
+              "field": "title",
+              "message": "title wajib diisi."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get-taskbyID",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "title": "Task Baru",
+          "priority": "high",
+          "status": "todo",
+          "createdAt": "2026-06-04T10:02:02.890Z",
+          "updatedAt": "2026-06-04T10:02:02.890Z"
+        }
+      }
+    },
+    {
+      "name": "Get-notFoundtask",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Task dengan ID 10 tidak ditemukan."
+        }
+      }
+    },
+    {
+      "name": "Patch-taskId2-done",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "title": "Belajar Express",
+          "status": "done",
+          "priority": "high",
+          "createdAt": "2024-01-11T00:00:00.000Z",
+          "updatedAt": "2026-06-04T10:10:35.182Z"
+        }
+      }
+    },
+    {
+      "name": "Put-taskId1",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "title": "Updated",
+          "status": "done",
+          "priority": "low",
+          "createdAt": "2024-01-10T00:00:00.000Z",
+          "updatedAt": "2026-06-04T10:14:05.437Z"
+        }
+      }
+    },
+    {
+      "name": "Delete-taskId3",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": "1"
+    },
+    {
+      "name": "Delete-notFound",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Task dengan ID 999\ntidak ditemukan."
+        }
+      }
+    }
+  ]
+}
