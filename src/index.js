@@ -3,6 +3,7 @@ const config = require('./config');
 const express = require('express');
 const routes = require('./routes');
 const tasksRoutes = require('./routes/tasks.routes');
+const usersRoutes = require('./routes/users.routes'); // BARU
 const setupSwagger = require('./docs/swagger');
 
 const app = express();
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 app.use('/', routes); // /health
 app.use('/api', routes); // /api/info, /api/echo/:msg
 app.use('/api/v1/tasks', tasksRoutes); // /api/v1/tasks (CRUD)
+app.use('/api/v1/users', usersRoutes);
 
 // ─── Swagger UI ─────────────────────────────────────────────
 setupSwagger(app);
@@ -56,6 +58,7 @@ app.listen(config.port, () => {
     console.log('─'.repeat(50));
     console.log(` ${config.appName} v${config.version}`);
     console.log(` Environment : ${config.env}`);
+    console.log(` Database : MySQL (Prisma MariaDB Adapter)`);
     console.log(` Server : http://localhost:${config.port}`);
     console.log(` Docs : http://localhost:${config.port}/api/docs`);
     console.log('─'.repeat(50));

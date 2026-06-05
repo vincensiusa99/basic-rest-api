@@ -17,6 +17,19 @@ const createTaskSchema = Joi.object({
             'any.required': 'title wajib diisi.',
         }),
     description: Joi.string().trim().max(1000).optional().allow(''),
+    userId: Joi.number().integer().positive().required()
+        .messages({
+            'number.base': 'userId harus berupa angka.',
+            'number.integer': 'userId harus berupa bilangan bulat.',
+            'number.positive': 'userId harus bernilai positif.',
+            'any.required': 'userId wajib diisi.',
+        }),
+    categoryId: Joi.number().integer().positive().optional()
+        .messages({
+            'number.base': 'categoryId harus berupa angka.',
+            'number.integer': 'categoryId harus berupa bilangan bulat.',
+            'number.positive': 'categoryId harus bernilai positif.',
+        }),
     status: Joi.string().valid(...VALID_STATUS).default('todo')
         .messages({
             'any.only': `status harus salah satu dari:
