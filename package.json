@@ -8,9 +8,15 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "db:seed": "node --env-file=.env prisma/seed.js"
+  },
+  "prisma": {
+    "seed": "node --env-file=.env prisma/seed.js"
   },
   "dependencies": {
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "joi": "^18.2.1",
@@ -19,6 +25,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "prisma": "^7.8.0",
+    "tsx": "^4.22.4"
   }
 }

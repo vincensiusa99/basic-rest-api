@@ -1,0 +1,497 @@
+{
+  "info": {
+    "_postman_id": "72ba8f9b-a4f4-4e08-98ad-0faff329406c",
+    "name": "basic-rest-api",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55117058",
+    "_collection_link": "https://go.postman.co/collection/55117058-72ba8f9b-a4f4-4e08-98ad-0faff329406c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get-allTaskandRelations",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": {
+        "data": [
+          {
+            "id": 6,
+            "title": "Meeting tim desain",
+            "description": null,
+            "status": "TODO",
+            "priority": "MEDIUM",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.795Z",
+            "updatedAt": "2026-06-04T15:49:46.795Z",
+            "userId": 2,
+            "categoryId": 2,
+            "user": {
+              "id": 2,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            },
+            "category": {
+              "id": 2,
+              "name": "Pekerjaan",
+              "color": "#F59E0B"
+            }
+          },
+          {
+            "id": 3,
+            "title": "Belajar Prisma ORM",
+            "description": null,
+            "status": "TODO",
+            "priority": "MEDIUM",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.794Z",
+            "updatedAt": "2026-06-04T15:49:46.794Z",
+            "userId": 1,
+            "categoryId": 1,
+            "user": {
+              "id": 1,
+              "name": "Budi Santoso",
+              "email": "budi@example.com"
+            },
+            "category": {
+              "id": 1,
+              "name": "Belajar",
+              "color": "#6366F1"
+            }
+          },
+          {
+            "id": 5,
+            "title": "Review laporan bulanan",
+            "description": null,
+            "status": "TODO",
+            "priority": "LOW",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.794Z",
+            "updatedAt": "2026-06-04T15:49:46.794Z",
+            "userId": 2,
+            "categoryId": 2,
+            "user": {
+              "id": 2,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            },
+            "category": {
+              "id": 2,
+              "name": "Pekerjaan",
+              "color": "#F59E0B"
+            }
+          },
+          {
+            "id": 4,
+            "title": "Setup MySQL + XAMPP",
+            "description": "Menggunakan Prisma ORM",
+            "status": "IN_PROGRESS",
+            "priority": "HIGH",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.793Z",
+            "updatedAt": "2026-06-04T15:49:46.793Z",
+            "userId": 1,
+            "categoryId": 3,
+            "user": {
+              "id": 1,
+              "name": "Budi Santoso",
+              "email": "budi@example.com"
+            },
+            "category": {
+              "id": 3,
+              "name": "Proyek",
+              "color": "#10B981"
+            }
+          },
+          {
+            "id": 1,
+            "title": "Setup Express server",
+            "description": null,
+            "status": "DONE",
+            "priority": "HIGH",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.792Z",
+            "updatedAt": "2026-06-04T15:49:46.792Z",
+            "userId": 1,
+            "categoryId": 3,
+            "user": {
+              "id": 1,
+              "name": "Budi Santoso",
+              "email": "budi@example.com"
+            },
+            "category": {
+              "id": 3,
+              "name": "Proyek",
+              "color": "#10B981"
+            }
+          },
+          {
+            "id": 2,
+            "title": "Belajar REST API",
+            "description": null,
+            "status": "DONE",
+            "priority": "HIGH",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.792Z",
+            "updatedAt": "2026-06-04T15:49:46.792Z",
+            "userId": 1,
+            "categoryId": 1,
+            "user": {
+              "id": 1,
+              "name": "Budi Santoso",
+              "email": "budi@example.com"
+            },
+            "category": {
+              "id": 1,
+              "name": "Belajar",
+              "color": "#6366F1"
+            }
+          }
+        ],
+        "pagination": {
+          "total": 6,
+          "limit": 10,
+          "offset": 0,
+          "hasNext": false,
+          "hasPrev": false,
+          "nextOffset": null,
+          "prevOffset": null
+        }
+      }
+    },
+    {
+      "name": "Get-toDostatus",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": [
+          {
+            "id": 6,
+            "title": "Meeting tim desain",
+            "description": null,
+            "status": "TODO",
+            "priority": "MEDIUM",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.795Z",
+            "updatedAt": "2026-06-04T15:49:46.795Z",
+            "userId": 2,
+            "categoryId": 2,
+            "user": {
+              "id": 2,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            },
+            "category": {
+              "id": 2,
+              "name": "Pekerjaan",
+              "color": "#F59E0B"
+            }
+          },
+          {
+            "id": 3,
+            "title": "Belajar Prisma ORM",
+            "description": null,
+            "status": "TODO",
+            "priority": "MEDIUM",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.794Z",
+            "updatedAt": "2026-06-04T15:49:46.794Z",
+            "userId": 1,
+            "categoryId": 1,
+            "user": {
+              "id": 1,
+              "name": "Budi Santoso",
+              "email": "budi@example.com"
+            },
+            "category": {
+              "id": 1,
+              "name": "Belajar",
+              "color": "#6366F1"
+            }
+          },
+          {
+            "id": 5,
+            "title": "Review laporan bulanan",
+            "description": null,
+            "status": "TODO",
+            "priority": "LOW",
+            "dueDate": null,
+            "createdAt": "2026-06-04T15:49:46.794Z",
+            "updatedAt": "2026-06-04T15:49:46.794Z",
+            "userId": 2,
+            "categoryId": 2,
+            "user": {
+              "id": 2,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            },
+            "category": {
+              "id": 2,
+              "name": "Pekerjaan",
+              "color": "#F59E0B"
+            }
+          }
+        ],
+        "pagination": {
+          "total": 3,
+          "limit": 10,
+          "offset": 0,
+          "hasNext": false,
+          "hasPrev": false,
+          "nextOffset": null,
+          "prevOffset": null
+        }
+      }
+    },
+    {
+      "name": "Post-newTask",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "id": 7,
+          "title": "Test",
+          "description": null,
+          "status": "TODO",
+          "priority": "MEDIUM",
+          "dueDate": null,
+          "createdAt": "2026-06-05T00:59:46.756Z",
+          "updatedAt": "2026-06-05T00:59:46.756Z",
+          "userId": 1,
+          "categoryId": null,
+          "user": {
+            "id": 1,
+            "name": "Budi Santoso",
+            "email": "budi@example.com"
+          },
+          "category": null
+        }
+      }
+    },
+    {
+      "name": "Post-newInvalidtaskId",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": {
+        "error": {
+          "code": "INTERNAL_ERROR",
+          "message": "\nInvalid `prisma.task.create()` invocation in\nC:\\srccode\\basic-rest-api\\src\\repositories\\task.repository.js:45:28\n\n  42 \n  43 // ─── Buat task baru ─────────────────────────────────────\n  44 async create(data) {\n→ 45     return prisma.task.create(\nForeign key constraint violated on the fields: (`userId`)"
+        }
+      }
+    },
+    {
+      "name": "Get-taskByid",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "title": "Setup Express server",
+          "description": null,
+          "status": "DONE",
+          "priority": "HIGH",
+          "dueDate": null,
+          "createdAt": "2026-06-04T15:49:46.792Z",
+          "updatedAt": "2026-06-04T15:49:46.792Z",
+          "userId": 1,
+          "categoryId": 3,
+          "user": {
+            "id": 1,
+            "name": "Budi Santoso",
+            "email": "budi@example.com"
+          },
+          "category": {
+            "id": 3,
+            "name": "Proyek",
+            "color": "#10B981"
+          }
+        }
+      }
+    },
+    {
+      "name": "Patch-task2",
+      "request": {
+        "method": "PATCH",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "title": "Belajar REST API",
+          "description": null,
+          "status": "DONE",
+          "priority": "HIGH",
+          "dueDate": null,
+          "createdAt": "2026-06-04T15:49:46.792Z",
+          "updatedAt": "2026-06-05T05:05:55.527Z",
+          "userId": 1,
+          "categoryId": 1,
+          "user": {
+            "id": 1,
+            "name": "Budi Santoso",
+            "email": "budi@example.com"
+          },
+          "category": {
+            "id": 1,
+            "name": "Belajar",
+            "color": "#6366F1"
+          }
+        }
+      }
+    },
+    {
+      "name": "Delete-task3",
+      "request": {
+        "method": "DELETE",
+        "header": []
+      },
+      "response": [
+        1
+      ]
+    },
+    {
+      "name": "Get-taskUserid1byJoin",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "data": {
+          "user": {
+            "id": 1,
+            "name": "Budi Santoso",
+            "email": "budi@example.com"
+          },
+          "tasks": [
+            {
+              "id": 10,
+              "title": "Test",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-05T01:06:55.589Z",
+              "updatedAt": "2026-06-05T01:06:55.589Z",
+              "userId": 1,
+              "categoryId": null,
+              "category": null
+            },
+            {
+              "id": 7,
+              "title": "Test",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-05T00:59:46.756Z",
+              "updatedAt": "2026-06-05T00:59:46.756Z",
+              "userId": 1,
+              "categoryId": null,
+              "category": null
+            },
+            {
+              "id": 4,
+              "title": "Setup MySQL + XAMPP",
+              "description": "Menggunakan Prisma ORM",
+              "status": "IN_PROGRESS",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.793Z",
+              "updatedAt": "2026-06-04T15:49:46.793Z",
+              "userId": 1,
+              "categoryId": 3,
+              "category": {
+                "id": 3,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            },
+            {
+              "id": 1,
+              "title": "Setup Express server",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.792Z",
+              "updatedAt": "2026-06-04T15:49:46.792Z",
+              "userId": 1,
+              "categoryId": 3,
+              "category": {
+                "id": 3,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            },
+            {
+              "id": 2,
+              "title": "Belajar REST API",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.792Z",
+              "updatedAt": "2026-06-05T05:05:55.527Z",
+              "userId": 1,
+              "categoryId": 1,
+              "category": {
+                "id": 1,
+                "name": "Belajar",
+                "color": "#6366F1"
+              }
+            }
+          ],
+          "total": 5
+        }
+      }
+    },
+    {
+      "name": "Get-invalidUseridTasks",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": {
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "User ID 999 tidak ditemukan."
+        }
+      }
+    }
+  ]
+}

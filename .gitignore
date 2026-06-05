@@ -18,3 +18,4 @@ Thumbs.db # Windows
 # Build output
 dist/
 build/
+/src/generated/prisma
