@@ -1,0 +1,542 @@
+{
+  "info": {
+    "_postman_id": "72ba8f9b-a4f4-4e08-98ad-0faff329406c",
+    "name": "basic-rest-api",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55117058",
+    "_collection_link": "https://go.postman.co/collection/55117058-72ba8f9b-a4f4-4e08-98ad-0faff329406c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "POST - newUser",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "message": "Registrasi berhasil.",
+          "data": {
+            "id": 3,
+            "name": "Andi",
+            "email": "andi@test.com",
+            "createdAt": "2026-06-10T04:50:59.824Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - newUserinvalid",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "error": {
+            "code": "DUPLICATE_EMAIL",
+            "message": "Email sudah terdaftar."
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - login",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "message": "Login berhasil.",
+          "data": {
+            "id": 3,
+            "name": "Andi",
+            "email": "andi@test.com"
+          },
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImVtYWlsIjoiYW5kaUB0ZXN0LmNvbSIsImlhdCI6MTc4MTA3MTc3MCwiZXhwIjoxNzgxMDcyNjcwLCJqdGkiOiJhMGU2ZTQwNy1hMGI5LTRiYTEtYjI4OS0xY2ZjMzlmNzhlNDcifQ.OWqCY27d_r5U7aTUsnA6H6nzYwO9kgmLQFLeP7gE0aY",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4MTA3MTc3MCwiZXhwIjoxNzgxNjc2NTcwLCJqdGkiOiIzZTdmNmU0NC1hNTg1LTQwNzItODJjMS1hY2I1ODBmODg4ZmUifQ.uDDgUgnHgWX3hkXyJOf0HZYUypdRK7Zr3xz_iyLDCFQ"
+        }
+      ]
+    },
+    {
+      "name": "POST - invalidLogin",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "error": {
+            "code": "INVALID_CREDENTIALS",
+            "message": "Email atau password salah."
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - profile",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "data": {
+            "userId": 3,
+            "email": "andi@test.com"
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - tasksNoToken",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "error": {
+            "code": "MISSING_TOKEN",
+            "message": "Access token diperlukan. Sertakan header: Authorization: Bearer <token>"
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - tasksInvalidToken",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "error": {
+            "code": "INVALID_TOKEN",
+            "message": "Access token tidak valid."
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - tasksValidtoken",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "data": [
+            {
+              "id": 10,
+              "title": "Test",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-05T01:06:55.589Z",
+              "updatedAt": "2026-06-05T01:06:55.589Z",
+              "userId": 1,
+              "categoryId": null,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": null
+            },
+            {
+              "id": 7,
+              "title": "Test",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-05T00:59:46.756Z",
+              "updatedAt": "2026-06-05T00:59:46.756Z",
+              "userId": 1,
+              "categoryId": null,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": null
+            },
+            {
+              "id": 6,
+              "title": "Meeting tim desain",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.795Z",
+              "updatedAt": "2026-06-04T15:49:46.795Z",
+              "userId": 2,
+              "categoryId": 2,
+              "user": {
+                "id": 2,
+                "name": "Siti Rahayu",
+                "email": "siti@example.com"
+              },
+              "category": {
+                "id": 2,
+                "name": "Pekerjaan",
+                "color": "#F59E0B"
+              }
+            },
+            {
+              "id": 5,
+              "title": "Review laporan bulanan",
+              "description": null,
+              "status": "TODO",
+              "priority": "LOW",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.794Z",
+              "updatedAt": "2026-06-04T15:49:46.794Z",
+              "userId": 2,
+              "categoryId": 2,
+              "user": {
+                "id": 2,
+                "name": "Siti Rahayu",
+                "email": "siti@example.com"
+              },
+              "category": {
+                "id": 2,
+                "name": "Pekerjaan",
+                "color": "#F59E0B"
+              }
+            },
+            {
+              "id": 4,
+              "title": "Setup MySQL + XAMPP",
+              "description": "Menggunakan Prisma ORM",
+              "status": "IN_PROGRESS",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.793Z",
+              "updatedAt": "2026-06-04T15:49:46.793Z",
+              "userId": 1,
+              "categoryId": 3,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 3,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            },
+            {
+              "id": 1,
+              "title": "Setup Express server",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.792Z",
+              "updatedAt": "2026-06-04T15:49:46.792Z",
+              "userId": 1,
+              "categoryId": 3,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 3,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            },
+            {
+              "id": 2,
+              "title": "Belajar REST API",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.792Z",
+              "updatedAt": "2026-06-05T05:05:55.527Z",
+              "userId": 1,
+              "categoryId": 1,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 1,
+                "name": "Belajar",
+                "color": "#6366F1"
+              }
+            }
+          ],
+          "pagination": {
+            "total": 7,
+            "limit": 10,
+            "offset": 0,
+            "hasNext": false,
+            "hasPrev": false,
+            "nextOffset": null,
+            "prevOffset": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - refreshToken",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "message": "Token berhasil diperbarui.",
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImVtYWlsIjoiYW5kaUB0ZXN0LmNvbSIsImlhdCI6MTc4MTA3OTE2OCwiZXhwIjoxNzgxMDgwMDY4LCJqdGkiOiIxZWMyNWY1OS03MWQ0LTRlOGYtYWI0MS05ZGMyZjU0YzA3NTMifQ.T_6tCBwTSHFodAKs2iK48ecq7ShRNlqxEHw1I0mZho8",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4MTA3OTE2OCwiZXhwIjoxNzgxNjgzOTY4LCJqdGkiOiJlNjBhZWU1Zi0yNzAzLTQ3MDYtYmY1MS03MjhlNGVhOWYzMDEifQ.E1W2j0BzPtG83MWkuoCVZeoIYUoZwewLZjZIW1zzXm4"
+        }
+      ]
+    },
+    {
+      "name": "GET - tasksWithnewToken",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "data": [
+            {
+              "id": 12,
+              "title": "Test",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-10T07:45:46.801Z",
+              "updatedAt": "2026-06-10T07:45:46.801Z",
+              "userId": 3,
+              "categoryId": null,
+              "user": {
+                "id": 3,
+                "name": "Andi",
+                "email": "andi@test.com"
+              },
+              "category": null
+            },
+            {
+              "id": 10,
+              "title": "Test",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-05T01:06:55.589Z",
+              "updatedAt": "2026-06-05T01:06:55.589Z",
+              "userId": 1,
+              "categoryId": null,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": null
+            },
+            {
+              "id": 7,
+              "title": "Test",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-05T00:59:46.756Z",
+              "updatedAt": "2026-06-05T00:59:46.756Z",
+              "userId": 1,
+              "categoryId": null,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": null
+            },
+            {
+              "id": 6,
+              "title": "Meeting tim desain",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.795Z",
+              "updatedAt": "2026-06-04T15:49:46.795Z",
+              "userId": 2,
+              "categoryId": 2,
+              "user": {
+                "id": 2,
+                "name": "Siti Rahayu",
+                "email": "siti@example.com"
+              },
+              "category": {
+                "id": 2,
+                "name": "Pekerjaan",
+                "color": "#F59E0B"
+              }
+            },
+            {
+              "id": 5,
+              "title": "Review laporan bulanan",
+              "description": null,
+              "status": "TODO",
+              "priority": "LOW",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.794Z",
+              "updatedAt": "2026-06-04T15:49:46.794Z",
+              "userId": 2,
+              "categoryId": 2,
+              "user": {
+                "id": 2,
+                "name": "Siti Rahayu",
+                "email": "siti@example.com"
+              },
+              "category": {
+                "id": 2,
+                "name": "Pekerjaan",
+                "color": "#F59E0B"
+              }
+            },
+            {
+              "id": 4,
+              "title": "Setup MySQL + XAMPP",
+              "description": "Menggunakan Prisma ORM",
+              "status": "IN_PROGRESS",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.793Z",
+              "updatedAt": "2026-06-04T15:49:46.793Z",
+              "userId": 1,
+              "categoryId": 3,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 3,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            },
+            {
+              "id": 1,
+              "title": "Setup Express server",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.792Z",
+              "updatedAt": "2026-06-04T15:49:46.792Z",
+              "userId": 1,
+              "categoryId": 3,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 3,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            },
+            {
+              "id": 2,
+              "title": "Belajar REST API",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-04T15:49:46.792Z",
+              "updatedAt": "2026-06-05T05:05:55.527Z",
+              "userId": 1,
+              "categoryId": 1,
+              "user": {
+                "id": 1,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 1,
+                "name": "Belajar",
+                "color": "#6366F1"
+              }
+            }
+          ],
+          "pagination": {
+            "total": 8,
+            "limit": 10,
+            "offset": 0,
+            "hasNext": false,
+            "hasPrev": false,
+            "nextOffset": null,
+            "prevOffset": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - refreshReusetoken",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "error": {
+            "code": "TOKEN_REUSE_DETECTED",
+            "message": "Token mencurigakan terdeteksi. Silakan login ulang."
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - allRevokeTokens",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "error": {
+            "code": "TOKEN_EXPIRED",
+            "message": "Access token sudah expired. Gunakan refresh token untuk memperbarui."
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - logOut",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "message": "Logout berhasil."
+        }
+      ]
+    },
+    {
+      "name": "POST - refreshTokenAfterlogOut",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
