@@ -14,7 +14,7 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
     console.log('Mulai seeding database MySQL...');
     // Hapus data lama — urutan PENTING karena foreign key constraint!
-    // Hapus task dulu (bergantung pada users & categories)
+    await prisma.activityLog.deleteMany();
     await prisma.task.deleteMany();
     await prisma.category.deleteMany();
     await prisma.user.deleteMany();
@@ -44,7 +44,7 @@ async function main() {
     ]);
     console.log(' ✓ 2 user dibuat');
     // ─── Buat Tasks ──────────────────────────────────────
-    await Promise.all([
+    const [task1, task2, task3, task4, task5, task6] = await Promise.all([
         prisma.task.create({
             data: {
                 title: 'Setup Express server', status: 'DONE',
@@ -60,26 +60,66 @@ async function main() {
         prisma.task.create({
             data: {
                 title: 'Setup MySQL + XAMPP', status: 'IN_PROGRESS',
-                priority: 'HIGH', userId: budi.id, categoryId: catProyek.id, description: 'Menggunakan Prisma ORM' } }),
-prisma.task.create({
-                    data: {
-                        title: 'Belajar Prisma ORM', status: 'TODO',
-                        priority: 'MEDIUM', userId: budi.id, categoryId: catBelajar.id
-                    }
-                }),
-                prisma.task.create({
-                    data: {
-                        title: 'Review laporan bulanan', status: 'TODO',
-                        priority: 'LOW', userId: siti.id, categoryId: catKerja.id
-                    }
-                }),
-                prisma.task.create({
-                    data: {
-                        title: 'Meeting tim desain', status: 'TODO',
-                        priority: 'MEDIUM', userId: siti.id, categoryId: catKerja.id
-                    }
-                }),
-]);
+                priority: 'HIGH', userId: budi.id, categoryId: catProyek.id,
+                description: 'Menggunakan Prisma ORM'
+            }
+        }),
+        prisma.task.create({
+            data: {
+                title: 'Belajar Prisma ORM', status: 'TODO',
+                priority: 'MEDIUM', userId: budi.id, categoryId: catBelajar.id
+            }
+        }),
+        prisma.task.create({
+            data: {
+                title: 'Review laporan bulanan', status: 'TODO',
+                priority: 'LOW', userId: siti.id, categoryId: catKerja.id
+            }
+        }),
+        prisma.task.create({
+            data: {
+                title: 'Meeting tim desain', status: 'TODO',
+                priority: 'MEDIUM', userId: siti.id, categoryId: catKerja.id
+            }
+        }),
+    ]);
+
+    console.log(' ✓ 6 task dibuat');
+
+    // ─── Buat Activity Logs ─────────────────────────────────
+    await Promise.all([
+        prisma.activityLog.create({ data: {
+            taskId: task1.id,
+            userId: budi.id,
+            action: 'CREATED',
+            changes: { title: 'Setup Express server', status: 'DONE' },
+        } }),
+        prisma.activityLog.create({ data: {
+            taskId: task2.id,
+            userId: budi.id,
+            action: 'CREATED',
+            changes: { title: 'Belajar REST API', priority: 'HIGH' },
+        } }),
+        prisma.activityLog.create({ data: {
+            taskId: task3.id,
+            userId: budi.id,
+            action: 'UPDATED',
+            changes: { status: 'IN_PROGRESS', description: 'Menggunakan Prisma ORM' },
+        } }),
+        prisma.activityLog.create({ data: {
+            taskId: task4.id,
+            userId: budi.id,
+            action: 'CREATED',
+            changes: { title: 'Belajar Prisma ORM', priority: 'MEDIUM' },
+        } }),
+        prisma.activityLog.create({ data: {
+            taskId: task5.id,
+            userId: siti.id,
+            action: 'UPDATED',
+            changes: { status: 'TODO', priority: 'LOW' },
+        } }),
+    ]);
+    console.log(' ✓ 5 activity log dibuat');
     console.log(' ✓ 6 task dibuat');
     console.log('Seeding selesai!');
 }

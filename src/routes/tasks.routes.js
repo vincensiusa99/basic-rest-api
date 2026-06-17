@@ -1,7 +1,8 @@
 // File: src/routes/tasks.routes.js
 const express = require('express');
 const router = express.Router();
-const ctrl = require('../controllers/tasks.controller');
+const taskCtrl = require('../controllers/tasks.controller');
+const activityLogCtrl = require('../controllers/activityLog.controller');
 const validate = require('../middleware/validate');
 const {
     createTaskSchema,
@@ -66,7 +67,7 @@ const {
  *             schema:
  *               $ref: '#/components/schemas/TaskList'
  */
-router.get('/', validate(listTasksSchema, 'query'), ctrl.listTasks);
+router.get('/', validate(listTasksSchema, 'query'), taskCtrl.listTasks);
 
 /**
  * @swagger
@@ -94,7 +95,7 @@ router.get('/', validate(listTasksSchema, 'query'), ctrl.listTasks);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/', validate(createTaskSchema, 'body'), ctrl.createTask);
+router.post('/', validate(createTaskSchema, 'body'), taskCtrl.createTask);
 
 /**
  * @swagger
@@ -123,7 +124,7 @@ router.post('/', validate(createTaskSchema, 'body'), ctrl.createTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/:id', ctrl.getTask);
+router.get('/:id', taskCtrl.getTask);
 
 /**
  * @swagger
@@ -164,7 +165,7 @@ router.get('/:id', ctrl.getTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put('/:id', validate(replaceTaskSchema, 'body'), ctrl.replaceTask);
+router.put('/:id', validate(replaceTaskSchema, 'body'), taskCtrl.replaceTask);
 
 /**
  * @swagger
@@ -222,7 +223,7 @@ router.put('/:id', validate(replaceTaskSchema, 'body'), ctrl.replaceTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.patch('/:id', validate(updateTaskSchema, 'body'), ctrl.updateTask);
+router.patch('/:id', validate(updateTaskSchema, 'body'), taskCtrl.updateTask);
 
 /**
  * @swagger
@@ -247,6 +248,47 @@ router.patch('/:id', validate(updateTaskSchema, 'body'), ctrl.updateTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete('/:id', ctrl.deleteTask);
+router.delete('/:id', taskCtrl.deleteTask);
+
+/**
+ * @swagger
+ * /tasks/{id}/activity:
+ *   get:
+ *     summary: Ambil activity log untuk task tertentu
+ *     tags: [Tasks]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID task
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Jumlah data per halaman
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: Jumlah data yang dilewati
+ *     responses:
+ *       '200':
+ *         description: Berhasil mengambil activity log task
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ActivityLogList'
+ *       '404':
+ *         description: Task tidak ditemukan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/:id/activity', activityLogCtrl.getActivityLogsByTask);
 
 module.exports = router;

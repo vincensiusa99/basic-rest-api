@@ -4,6 +4,7 @@ const express = require('express');
 const routes = require('./routes');
 const tasksRoutes = require('./routes/tasks.routes');
 const usersRoutes = require('./routes/users.routes');
+const activityLogRoutes = require('./routes/activityLog.routes');
 const authRoutes = require('./routes/auth.routes'); // BARU
 const authenticate = require('./middleware/authenticate'); // BARU
 const setupSwagger = require('./docs/swagger');
@@ -37,6 +38,7 @@ app.use('/auth', authRoutes);
 // authenticate dijalankan sebelum semua route /api/v1/...
 app.use('/api/v1', authenticate);
 app.use('/api/v1/tasks', tasksRoutes);
+app.use('/api/v1/activity-logs', activityLogRoutes);
 app.use('/api/v1/users', usersRoutes);
 
 // ─── Swagger UI ─────────────────────────────────────────────
@@ -58,7 +60,16 @@ app.use((err, req, res, next) => {
     // Error dengan statusCode dari authService
     if (err.statusCode) {
         return res.status(err.statusCode).json({
-            error: { code: err.code || 'AUTH_ERROR', message: err.message },
+            error: { code: err.code || 'CUSTOM_ERROR', message: err.message },
+        });
+    }
+    // Prisma P2003: foreign key constraint violation
+    if (err.code === 'P2003') {
+        return res.status(400).json({
+            error: {
+                code: 'FOREIGN_KEY_CONSTRAINT',
+                message: 'Referensi taskId atau userId tidak ditemukan.',
+            },
         });
     }
     // Prisma P2002: email duplikat (sudah ada user dengan email tersebut)
