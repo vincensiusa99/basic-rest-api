@@ -1,0 +1,402 @@
+{
+  "info": {
+    "_postman_id": "72ba8f9b-a4f4-4e08-98ad-0faff329406c",
+    "name": "basic-rest-api",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55117058",
+    "_collection_link": "https://go.postman.co/collection/55117058-72ba8f9b-a4f4-4e08-98ad-0faff329406c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "POST - login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"Andi\",\r\n    \"email\":\"andi@test.com\",\r\n    \"password\":\"Secret123!\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - activityLog",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "data": [
+            {
+              "id": 1,
+              "taskId": 17,
+              "userId": 4,
+              "action": "UPDATED",
+              "changes": {
+                "status": "TODO",
+                "priority": "LOW"
+              },
+              "createdAt": "2026-06-16T12:26:24.636Z",
+              "user": {
+                "id": 4,
+                "name": "Siti Rahayu",
+                "email": "siti@example.com"
+              }
+            },
+            {
+              "id": 4,
+              "taskId": 16,
+              "userId": 5,
+              "action": "CREATED",
+              "changes": {
+                "title": "Belajar Prisma ORM",
+                "priority": "MEDIUM"
+              },
+              "createdAt": "2026-06-16T12:26:24.636Z",
+              "user": {
+                "id": 5,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              }
+            },
+            {
+              "id": 2,
+              "taskId": 15,
+              "userId": 5,
+              "action": "UPDATED",
+              "changes": {
+                "status": "IN_PROGRESS",
+                "description": "Menggunakan Prisma ORM"
+              },
+              "createdAt": "2026-06-16T12:26:24.635Z",
+              "user": {
+                "id": 5,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              }
+            },
+            {
+              "id": 3,
+              "taskId": 14,
+              "userId": 5,
+              "action": "CREATED",
+              "changes": {
+                "title": "Setup Express server",
+                "status": "DONE"
+              },
+              "createdAt": "2026-06-16T12:26:24.635Z",
+              "user": {
+                "id": 5,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              }
+            },
+            {
+              "id": 5,
+              "taskId": 13,
+              "userId": 5,
+              "action": "CREATED",
+              "changes": {
+                "title": "Belajar REST API",
+                "priority": "HIGH"
+              },
+              "createdAt": "2026-06-16T12:26:24.635Z",
+              "user": {
+                "id": 5,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              }
+            }
+          ],
+          "pagination": {
+            "total": 5,
+            "limit": null,
+            "offset": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - newActivity",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{bearer_token_01rq}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"taskId\": 17,\r\n    \"userId\": 4,\r\n    \"action\": \"CREATED\",\r\n    \"changes\": {\r\n        \"title\": \"Task lama\",\r\n        \"status\": \"todo\"\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/v1/activity-logs",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "activity-logs"
+          ]
+        }
+      },
+      "response": [
+        {
+          "data": {
+            "id": 10,
+            "taskId": 17,
+            "userId": 4,
+            "action": "CREATED",
+            "changes": {
+              "title": "Task lama",
+              "status": "todo"
+            },
+            "createdAt": "2026-06-17T03:31:28.870Z",
+            "user": {
+              "id": 4,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - activityLogbyId",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{bearer_token_01rq}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/v1/activity-logs/10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "activity-logs",
+            "10"
+          ]
+        }
+      },
+      "response": [
+        {
+          "data": {
+            "id": 10,
+            "taskId": 17,
+            "userId": 4,
+            "action": "CREATED",
+            "changes": {
+              "title": "Task lama",
+              "status": "todo"
+            },
+            "createdAt": "2026-06-17T03:31:28.870Z",
+            "user": {
+              "id": 4,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT - activityLogbyId",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{bearer_token_01rq}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"taskId\": 17,\r\n    \"userId\": 4,\r\n    \"action\": \"UPDATED\",\r\n    \"changes\": {\r\n        \"title\": \"Task diperbarui\",\r\n        \"status\": \"in_progress\"\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/v1/activity-logs/10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "activity-logs",
+            "10"
+          ]
+        }
+      },
+      "response": [
+        {
+          "data": {
+            "id": 10,
+            "taskId": 17,
+            "userId": 4,
+            "action": "UPDATED",
+            "changes": {
+              "title": "Task diperbarui",
+              "status": "in_progress"
+            },
+            "createdAt": "2026-06-17T03:31:28.870Z",
+            "user": {
+              "id": 4,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PATCH - activityLogbyID",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{bearer_token_01rq}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"action\": \"DELETED\",\r\n    \"changes\": {\r\n        \"status\": \"done\"\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/v1/activity-logs/10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "activity-logs",
+            "10"
+          ]
+        }
+      },
+      "response": [
+        {
+          "data": {
+            "id": 10,
+            "taskId": 17,
+            "userId": 4,
+            "action": "DELETED",
+            "changes": {
+              "status": "done"
+            },
+            "createdAt": "2026-06-17T03:31:28.870Z",
+            "user": {
+              "id": 4,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE - activityLogbyId",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{bearer_token_01rq}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/v1/activity-logs/10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "activity-logs",
+            "10"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "supabase_service_role_api_key_06vx",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_0brd",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_01rq",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_08vk",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_08vk",
+      "secret": true
+    }
+  ]
+}

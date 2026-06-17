@@ -19,6 +19,7 @@ model User {
 
   tasks Task[]
   refreshTokens refreshToken[]
+  activityLogs ActivityLog[]
 
   @@map("users")
 }
@@ -67,6 +68,7 @@ model Task {
 
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  activityLogs ActivityLog[]
 
   // Index untuk mempercepat query filter umum
   @@index([userId])
@@ -74,6 +76,30 @@ model Task {
   @@index([userId, status]) // Composite index
 
   @@map("tasks")
+}
+
+// ─── Model ActivityLog ───────────────────────────────────────
+model ActivityLog {
+  id        Int            @id @default(autoincrement())
+  taskId    Int
+  userId    Int
+  action    ActivityAction
+  changes   Json
+  createdAt DateTime       @default(now())
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([userId, action])
+  @@map("activity_logs")
+}
+
+// ─── Enum untuk aksi pada log aktivitas ─────────────────────
+enum ActivityAction {
+  CREATED
+  UPDATED
+  DELETED
 }
 
 // ─── Enum ─────────────────────────────────────────────────

@@ -90,12 +90,56 @@ const options = {
                             type: 'array',
                             items: { $ref: '#/components/schemas/Task' }
                         },
-                        meta: { $ref: '#/components/schemas/ListMeta' }
+                        pagination: { $ref: '#/components/schemas/ListMeta' }
+                    }
+                },
+                CreateActivityLog: {
+                    type: 'object',
+                    required: ['taskId', 'userId', 'action', 'changes'],
+                    properties: {
+                        taskId: { type: 'integer', example: 1 },
+                        userId: { type: 'integer', example: 1 },
+                        action: {
+                            type: 'string',
+                            enum: ['CREATED', 'UPDATED', 'DELETED'],
+                            example: 'CREATED'
+                        },
+                        changes: {
+                            type: 'object',
+                            additionalProperties: true,
+                            example: { title: 'Task lama', status: 'todo' }
+                        },
+                        createdAt: { type: 'string', format: 'date-time' },
+                    },
+                },
+                ActivityLog: {
+                    allOf: [
+                        { '$ref': '#/components/schemas/CreateActivityLog' },
+                        {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 1 },
+                                createdAt: { type: 'string', format: 'date-time' },
+                            }
+                        },
+                    ],
+                },
+                ActivityLogList: {
+                    type: 'object',
+                    properties: {
+                        data: {
+                            type: 'array',
+                            items: { $ref: '#/components/schemas/ActivityLog' }
+                        },
+                        pagination: { $ref: '#/components/schemas/ListMeta' }
                     }
                 },
             },
         },
-        tags: [{ name: 'Tasks', description: 'Operasi CRUD untuk resource Task' }],
+        tags: [
+            { name: 'Tasks', description: 'Operasi CRUD untuk resource Task' },
+            { name: 'ActivityLogs', description: 'Operasi CRUD untuk Activity Log' },
+        ],
     },
     // swagger-jsdoc akan membaca JSDoc comment dari file-file ini
     apis: ['./src/routes/*.js'],
