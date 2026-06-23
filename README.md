@@ -24,6 +24,7 @@
    APP_VERSION=1.0.0
    ```
    > Jika menggunakan MySQL di XAMPP dan port default tidak 3306, sesuaikan `DATABASE_URL` dengan port yang benar.
+   > **Catatan**: Jika terjadi error koneksi database terkait *public key retrieval* atau autentikasi, tambahkan parameter `?allowPublicKeyRetrieval=true` di akhir URL.
 6. Jalankan migrasi Prisma:
    ```bash
    npx prisma migrate deploy
@@ -115,6 +116,8 @@ basic-rest-api/
 
 ### 3.2 Auth (tanpa prefix `/api/v1` kecuali `/auth/me` hanya untuk token valid)
 
+> Endpoint ini dilindungi oleh **Rate Limiting** ketat untuk mencegah serangan *brute force* (contoh: limit request untuk `/auth/login` dan `/auth/refresh`). Password dienkripsi dengan kuat dan aman menggunakan algoritma **Argon2id**.
+
 - `POST /auth/register` — registrasi user baru
 - `POST /auth/login` — login dan dapatkan access token
 - `POST /auth/refresh` — refresh access token
@@ -123,8 +126,10 @@ basic-rest-api/
 
 ### 3.3 API terlindungi (`/api/v1`)
 
+> Endpoint di bawah ini dilindungi secara global oleh **CORS**, **Helmet**, dan **Rate Limiting**. Akses data dilindungi melalui **Role-Based Access Control (RBAC)** dan *tenant isolation* (User hanya bisa melihat dan memanipulasi datanya sendiri).
+
 #### Tasks
-- `GET /api/v1/tasks` — daftar task dengan pagination, filter, sort
+- `GET /api/v1/tasks` — daftar task milik user yang login dengan pagination, filter, sort
 - `POST /api/v1/tasks` — buat task baru
 - `GET /api/v1/tasks/:id` — detail task berdasarkan ID
 - `PUT /api/v1/tasks/:id` — ganti seluruh data task
@@ -143,6 +148,11 @@ basic-rest-api/
 #### Users
 - `GET /api/v1/users/:userId/tasks` — ambil semua task milik user tertentu
 
+#### Admin (Hanya untuk user dengan role `ADMIN`)
+- `GET /api/v1/admin/users` — ambil semua user di sistem
+- `PATCH /api/v1/admin/users/:id/role` — ubah role user (menjadi `USER` atau `ADMIN`)
+- `GET /api/v1/admin/tasks` — lihat semua task dari seluruh user
+
 ### 3.4 Dokumentasi Swagger
 
 - `GET /api/docs`
@@ -157,6 +167,7 @@ basic-rest-api/
   - `name` (String)
   - `email` (String, unique)
   - `password` (String)
+  - `role` (Enum: USER, ADMIN)
   - `createdAt` (DateTime)
   - `updatedAt` (DateTime)
 
@@ -210,4 +221,5 @@ basic-rest-api/
 - `Status`: `TODO`, `IN_PROGRESS`, `DONE`
 - `Priority`: `LOW`, `MEDIUM`, `HIGH`
 - `ActivityAction`: `CREATED`, `UPDATED`, `DELETED`
+- `Role`: `USER`, `ADMIN`
 

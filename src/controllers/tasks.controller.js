@@ -1,15 +1,20 @@
-// File: src/controllers/tasks.controller.js (versi MySQL)
+// File: src/controllers/tasks.controller.js
 const taskRepo = require('../repositories/task.repository');
 
 const listTasks = async (req, res, next) => {
     try {
         const { status, priority, sort, order, limit, offset } = req.query;
+
+        // User biasa hanya lihat task miliknya; Admin lihat semua
+        const userId = req.user.role === 'ADMIN' ? undefined : req.user.userId;
+
         const { data, total } = await taskRepo.findMany({
-            status, priority,
-            sort, order, limit, offset
+            userId, status, priority, sort, order, limit, offset
         });
+
         const numLimit = Number(limit) || 10;
         const numOffset = Number(offset) || 0;
+
         res.status(200).json({
             data,
             pagination: {
@@ -27,7 +32,8 @@ const listTasks = async (req, res, next) => {
 
 const createTask = async (req, res, next) => {
     try {
-        const task = await taskRepo.create(req.body);
+        // Gunakan userId dari token - jangan percaya userId dari body!
+        const task = await taskRepo.create({ ...req.body, userId: req.user.userId });
         res.status(201).set('Location', `/api/v1/tasks/${task.id}`).json({
             data: task
         });
@@ -36,7 +42,8 @@ const createTask = async (req, res, next) => {
 
 const getTask = async (req, res, next) => {
     try {
-        const task = await taskRepo.findById(req.params.id);
+        // req.task sudah di-set oleh checkTaskOwnership middleware (menghindari double query)
+        const task = req.task || await taskRepo.findById(req.params.id);
         if (!task) return res.status(404).json({
             error: {
                 code: 'NOT_FOUND',

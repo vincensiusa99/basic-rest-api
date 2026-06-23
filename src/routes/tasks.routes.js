@@ -4,12 +4,20 @@ const router = express.Router();
 const taskCtrl = require('../controllers/tasks.controller');
 const activityLogCtrl = require('../controllers/activityLog.controller');
 const validate = require('../middleware/validate');
+const authenticate = require('../middleware/authenticate');
+const authorize = require('../middleware/authorize');
+const { sanitizeBody } = require('../middleware/sanitize');
+const { checkTaskOwnership } = require('../middleware/checkOwnership');
 const {
     createTaskSchema,
     replaceTaskSchema,
     updateTaskSchema,
     listTasksSchema,
 } = require('../validators/task.validator');
+
+// Semua route di bawah butuh autentikasi
+router.use(authenticate);
+
 /**
  * @swagger
  * /tasks:
@@ -67,7 +75,8 @@ const {
  *             schema:
  *               $ref: '#/components/schemas/TaskList'
  */
-router.get('/', validate(listTasksSchema, 'query'), taskCtrl.listTasks);
+// GET /api/v1/tasks — Semua user terautentikasi bisa lihat (filtered by userId di controller)
+router.get('/', authorize('USER', 'ADMIN'), validate(listTasksSchema, 'query'), taskCtrl.listTasks);
 
 /**
  * @swagger
@@ -95,7 +104,8 @@ router.get('/', validate(listTasksSchema, 'query'), taskCtrl.listTasks);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/', validate(createTaskSchema, 'body'), taskCtrl.createTask);
+// POST /api/v1/tasks — USER dan ADMIN bisa buat task
+router.post('/', authorize('USER', 'ADMIN'), validate(createTaskSchema), sanitizeBody, taskCtrl.createTask);
 
 /**
  * @swagger
@@ -124,7 +134,8 @@ router.post('/', validate(createTaskSchema, 'body'), taskCtrl.createTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/:id', taskCtrl.getTask);
+// GET /api/v1/tasks/:id — User bisa lihat task sendiri, admin lihat semua
+router.get('/:id', checkTaskOwnership, taskCtrl.getTask);
 
 /**
  * @swagger
@@ -165,7 +176,8 @@ router.get('/:id', taskCtrl.getTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put('/:id', validate(replaceTaskSchema, 'body'), taskCtrl.replaceTask);
+// PUT /api/v1/tasks/:id — Hanya admin yang boleh ganti task secara keseluruhan
+router.put('/:id', validate(replaceTaskSchema), authorize('ADMIN'), taskCtrl.replaceTask);
 
 /**
  * @swagger
@@ -223,7 +235,8 @@ router.put('/:id', validate(replaceTaskSchema, 'body'), taskCtrl.replaceTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.patch('/:id', validate(updateTaskSchema, 'body'), taskCtrl.updateTask);
+// PATCH /api/v1/tasks/:id — Hanya pemilik atau admin
+router.patch('/:id', checkTaskOwnership, validate(updateTaskSchema), taskCtrl.updateTask);
 
 /**
  * @swagger
@@ -248,7 +261,8 @@ router.patch('/:id', validate(updateTaskSchema, 'body'), taskCtrl.updateTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete('/:id', taskCtrl.deleteTask);
+// DELETE /api/v1/tasks/:id — Hanya pemilik atau admin
+router.delete('/:id', checkTaskOwnership, taskCtrl.deleteTask);
 
 /**
  * @swagger
@@ -289,6 +303,7 @@ router.delete('/:id', taskCtrl.deleteTask);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/:id/activity', activityLogCtrl.getActivityLogsByTask);
+// GET /api/v1/tasks/:id/activity-logs — User bisa lihat activity log task sendiri, admin lihat semua
+router.get('/:id/activity', checkTaskOwnership, activityLogCtrl.getActivityLogsByTask);
 
 module.exports = router;

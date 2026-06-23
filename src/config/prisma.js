@@ -10,6 +10,7 @@ const adapter = new PrismaMariaDb({
     user: username,
     password: password || undefined,
     database: pathname.slice(1),
+    allowPublicKeyRetrieval: true,
 });
 
 // Singleton: satu instance untuk seluruh aplikasi
