@@ -69,10 +69,8 @@ const taskRepository = {
                 data: {
                     ...data,
                     status: data.status ? data.status.toUpperCase().replace('-','_') : undefined,
-priority: data.priority ? data.priority.toUpperCase()
-                        : undefined,
-                        dueDate: data.dueDate ? new Date(data.dueDate)
-                        : undefined,
+                    priority: data.priority ? data.priority.toUpperCase() : undefined,
+                    dueDate: data.dueDate !== undefined ? (data.dueDate ? new Date(data.dueDate) : null) : undefined,
 },
                 include: {
                     user: { select: { id: true, name: true, email: true } },

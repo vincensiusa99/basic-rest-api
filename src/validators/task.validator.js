@@ -2,8 +2,8 @@
 const Joi = require('joi');
 
 // Nilai yang valid untuk field status dan priority
-const VALID_STATUS = ['todo', 'in_progress', 'done'];
-const VALID_PRIORITY = ['low', 'medium', 'high'];
+const VALID_STATUS = ['TODO', 'IN_PROGRESS', 'DONE'];
+const VALID_PRIORITY = ['LOW', 'MEDIUM', 'HIGH'];
 const VALID_SORT = ['createdAt', 'updatedAt', 'title', 'priority'];
 const VALID_ORDER = ['asc', 'desc'];
 
@@ -23,17 +23,17 @@ const createTaskSchema = Joi.object({
             'number.integer': 'categoryId harus berupa bilangan bulat.',
             'number.positive': 'categoryId harus bernilai positif.',
         }),
-    status: Joi.string().valid(...VALID_STATUS).default('todo')
+    status: Joi.string().valid(...VALID_STATUS).default('TODO')
         .messages({
             'any.only': `status harus salah satu dari:
 ${VALID_STATUS.join(', ')}.`
         }),
-    priority: Joi.string().valid(...VALID_PRIORITY).default('medium')
+    priority: Joi.string().valid(...VALID_PRIORITY).default('MEDIUM')
         .messages({
             'any.only': `priority harus salah satu dari:
 ${VALID_PRIORITY.join(', ')}.`
         }),
-    dueDate: Joi.date().iso().min('now').optional()
+    dueDate: Joi.date().iso().min('now').optional().allow(null, '')
         .messages({
             'date.min': 'dueDate tidak boleh di masa lalu.'
         }),
@@ -45,7 +45,7 @@ const replaceTaskSchema = Joi.object({
     description: Joi.string().trim().max(1000).optional().allow(''),
     status: Joi.string().valid(...VALID_STATUS).required(),
     priority: Joi.string().valid(...VALID_PRIORITY).required(),
-    dueDate: Joi.date().iso().optional().allow(null),
+    dueDate: Joi.date().iso().optional().allow(null, ''),
 });
 
 // Schema untuk PARTIAL UPDATE (PATCH /tasks/:id) — minimal 1 field
@@ -54,7 +54,7 @@ const updateTaskSchema = Joi.object({
     description: Joi.string().trim().max(1000).allow(''),
     status: Joi.string().valid(...VALID_STATUS),
     priority: Joi.string().valid(...VALID_PRIORITY),
-    dueDate: Joi.date().iso().allow(null),
+    dueDate: Joi.date().iso().allow(null, ''),
 }).min(1).messages({
     'object.min': 'Minimal satu field harus diisi untuk update.' });
 
