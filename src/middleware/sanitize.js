@@ -10,6 +10,8 @@ const sanitizeBody = (req, res, next) => {
     if (req.body && typeof req.body === 'object') {
         const sanitizeValue = (val) => {
             if (typeof val === 'string') return xss(val);
+            if (val instanceof Date) return val;
+            if (Array.isArray(val)) return val.map(sanitizeValue);
             if (typeof val === 'object' && val !== null) {
                 return Object.fromEntries(
                     Object.entries(val).map(([k, v]) => [k, sanitizeValue(v)])

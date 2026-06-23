@@ -48,9 +48,17 @@ const logout = async (req, res, next) => {
 };
 
 // GET /auth/me — informasi user yang sedang login
-const me = (req, res) => {
-    // req.user diisi oleh authenticate middleware
-    res.status(200).json({ data: req.user });
+const me = async (req, res, next) => {
+    try {
+        const userRepo = require('../repositories/user.repository');
+        const user = await userRepo.findById(req.user.userId);
+        if (!user) {
+            return res.status(404).json({ error: { message: 'User tidak ditemukan' } });
+        }
+        res.status(200).json({ data: { id: user.id, name: user.name, email: user.email, role: user.role, createdAt: user.createdAt } });
+    } catch (err) {
+        next(err);
+    }
 };
 
 module.exports = { register, login, refresh, logout, me };
