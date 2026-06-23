@@ -1,0 +1,567 @@
+{
+  "info": {
+    "_postman_id": "72ba8f9b-a4f4-4e08-98ad-0faff329406c",
+    "name": "basic-rest-api",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55117058",
+    "_collection_link": "https://go.postman.co/collection/55117058-72ba8f9b-a4f4-4e08-98ad-0faff329406c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "POST - login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"budi@example.com\",\r\n    \"password\":\"Budi123!\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": [
+        {
+          "message": "Login berhasil.",
+          "data": {
+            "id": 7,
+            "name": "Budi Santoso",
+            "email": "budi@example.com"
+          },
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImVtYWlsIjoiYnVkaUBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzgyMjAzMDY2LCJleHAiOjE3ODIyMDM5NjYsImp0aSI6IjFjNDMwYjA0LTEzNTctNGFlYy05NTcwLTkxMTUyZGVmMWZiNyJ9.wOFOxtRxd13GBY0LZ-w7KqR6nQ39NWy37aXUD3rwhss",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTc4MjIwMzA2NiwiZXhwIjoxNzgyODA3ODY2LCJqdGkiOiJmNmUwYWI0Mi02MmM2LTQ3NmQtOTQyYS1kNWVhZjVmMGEyZjEifQ.235NoBtFs1C6bs_Lv5eDrn_uoG6l6RqNg950kFGhMlA"
+        }
+      ]
+    },
+    {
+      "name": "GET - adminRoute",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImVtYWlsIjoiYnVkaUBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzgyMjAzMDY2LCJleHAiOjE3ODIyMDM5NjYsImp0aSI6IjFjNDMwYjA0LTEzNTctNGFlYy05NTcwLTkxMTUyZGVmMWZiNyJ9.wOFOxtRxd13GBY0LZ-w7KqR6nQ39NWy37aXUD3rwhss",
+            "type": "text"
+          }
+        ]
+      },
+      "response": [
+        {
+          "error": {
+            "code": "FORBIDDEN",
+            "message": "Akses ditolak. Diperlukan role: ADMIN."
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - logOut",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"refreshToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTc4MjIwMTQxNywiZXhwIjoxNzgyODA2MjE3LCJqdGkiOiJmNDY5MGQ2OC1hMmFmLTQyNTEtYTBlYS1iYzlhZjU2NTNhYjUifQ.1cdr8GWeu28GQgxG785RDSVc_7ficPQyXS5ZL9nRve0\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/auth/logout",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "auth",
+            "logout"
+          ]
+        }
+      },
+      "response": [
+        {
+          "message": "Logout berhasil."
+        }
+      ]
+    },
+    {
+      "name": "POST - loginAdmin",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"admin@example.com\",\r\n    \"password\":\"Admin123!\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": [
+        {
+          "message": "Login berhasil.",
+          "data": {
+            "id": 9,
+            "name": "Admin",
+            "email": "admin@example.com"
+          },
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3ODIyMDQ0NDQsImV4cCI6MTc4MjIwNTM0NCwianRpIjoiM2Y0NzY0MGEtYTIzZS00N2M1LWJiMWQtZTdmOTdhNmQ4MzlkIn0.-CkWr-CKwN4pJgur3tTyxtpI-VsokqTDyhOYI9JoCvM",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTc4MjIwNDQ0NCwiZXhwIjoxNzgyODA5MjQ0LCJqdGkiOiJhMDNmYTg5Yy1lM2MxLTQwMTItYTI1MC1lZjhmNThiOGEzOTAifQ.WwJUZXOwFFbviJY15Qt0G7jodrkS6DPrKKXFbQCXCMs"
+        }
+      ]
+    },
+    {
+      "name": "GET - allListadminRole",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3ODIyMDQ0NDQsImV4cCI6MTc4MjIwNTM0NCwianRpIjoiM2Y0NzY0MGEtYTIzZS00N2M1LWJiMWQtZTdmOTdhNmQ4MzlkIn0.-CkWr-CKwN4pJgur3tTyxtpI-VsokqTDyhOYI9JoCvM",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/v1/admin/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "users"
+          ]
+        }
+      },
+      "response": [
+        {
+          "data": [
+            {
+              "id": 9,
+              "name": "Admin",
+              "email": "admin@example.com",
+              "createdAt": "2026-06-23T06:41:12.414Z"
+            },
+            {
+              "id": 7,
+              "name": "Budi Santoso",
+              "email": "budi@example.com",
+              "createdAt": "2026-06-23T06:41:12.413Z"
+            },
+            {
+              "id": 8,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com",
+              "createdAt": "2026-06-23T06:41:12.413Z"
+            }
+          ],
+          "total": 3
+        }
+      ]
+    },
+    {
+      "name": "PATCH - promoteRole",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3ODIyMDQ0NDQsImV4cCI6MTc4MjIwNTM0NCwianRpIjoiM2Y0NzY0MGEtYTIzZS00N2M1LWJiMWQtZTdmOTdhNmQ4MzlkIn0.-CkWr-CKwN4pJgur3tTyxtpI-VsokqTDyhOYI9JoCvM",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/v1/admin/users/7/role",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "users",
+            "7",
+            "role"
+          ]
+        }
+      },
+      "response": [
+        {
+          "data": {
+            "id": 7,
+            "name": "Budi Santoso",
+            "email": "budi@example.com",
+            "role": "ADMIN"
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - tasksBudi",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImVtYWlsIjoiYnVkaUBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzgyMjAzMDY2LCJleHAiOjE3ODIyMDM5NjYsImp0aSI6IjFjNDMwYjA0LTEzNTctNGFlYy05NTcwLTkxMTUyZGVmMWZiNyJ9.wOFOxtRxd13GBY0LZ-w7KqR6nQ39NWy37aXUD3rwhss",
+            "type": "text"
+          }
+        ]
+      },
+      "response": [
+        {
+          "data": [
+            {
+              "id": 16,
+              "title": "Belajar Prisma ORM",
+              "description": null,
+              "status": "TODO",
+              "priority": "MEDIUM",
+              "dueDate": null,
+              "createdAt": "2026-06-23T06:41:12.436Z",
+              "updatedAt": "2026-06-23T06:41:12.436Z",
+              "userId": 7,
+              "categoryId": 10,
+              "user": {
+                "id": 7,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 10,
+                "name": "Belajar",
+                "color": "#6366F1"
+              }
+            },
+            {
+              "id": 14,
+              "title": "Belajar REST API",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-23T06:41:12.435Z",
+              "updatedAt": "2026-06-23T06:41:12.435Z",
+              "userId": 7,
+              "categoryId": 10,
+              "user": {
+                "id": 7,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 10,
+                "name": "Belajar",
+                "color": "#6366F1"
+              }
+            },
+            {
+              "id": 15,
+              "title": "Setup MySQL + XAMPP",
+              "description": "Menggunakan Prisma ORM",
+              "status": "IN_PROGRESS",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-23T06:41:12.435Z",
+              "updatedAt": "2026-06-23T06:41:12.435Z",
+              "userId": 7,
+              "categoryId": 12,
+              "user": {
+                "id": 7,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 12,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            },
+            {
+              "id": 13,
+              "title": "Setup Express server",
+              "description": null,
+              "status": "DONE",
+              "priority": "HIGH",
+              "dueDate": null,
+              "createdAt": "2026-06-23T06:41:12.434Z",
+              "updatedAt": "2026-06-23T06:41:12.434Z",
+              "userId": 7,
+              "categoryId": 12,
+              "user": {
+                "id": 7,
+                "name": "Budi Santoso",
+                "email": "budi@example.com"
+              },
+              "category": {
+                "id": 12,
+                "name": "Proyek",
+                "color": "#10B981"
+              }
+            }
+          ],
+          "pagination": {
+            "total": 4,
+            "limit": 10,
+            "offset": 0,
+            "hasNext": false,
+            "hasPrev": false,
+            "nextOffset": null,
+            "prevOffset": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "PATCH - taskBudi",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImVtYWlsIjoiYnVkaUBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzgyMjAzMDY2LCJleHAiOjE3ODIyMDM5NjYsImp0aSI6IjFjNDMwYjA0LTEzNTctNGFlYy05NTcwLTkxMTUyZGVmMWZiNyJ9.wOFOxtRxd13GBY0LZ-w7KqR6nQ39NWy37aXUD3rwhss",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"status\": \"done\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/v1/tasks/16",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "tasks",
+            "16"
+          ]
+        }
+      },
+      "response": [
+        {
+          "data": {
+            "id": 16,
+            "title": "Belajar Prisma ORM",
+            "description": null,
+            "status": "DONE",
+            "priority": "MEDIUM",
+            "dueDate": null,
+            "createdAt": "2026-06-23T06:41:12.436Z",
+            "updatedAt": "2026-06-23T08:28:25.729Z",
+            "userId": 7,
+            "categoryId": 10,
+            "user": {
+              "id": 7,
+              "name": "Budi Santoso",
+              "email": "budi@example.com"
+            },
+            "category": {
+              "id": 10,
+              "name": "Belajar",
+              "color": "#6366F1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PATCH - taskSiti",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImVtYWlsIjoiYnVkaUBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzgyMjAzMDY2LCJleHAiOjE3ODIyMDM5NjYsImp0aSI6IjFjNDMwYjA0LTEzNTctNGFlYy05NTcwLTkxMTUyZGVmMWZiNyJ9.wOFOxtRxd13GBY0LZ-w7KqR6nQ39NWy37aXUD3rwhss",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"status\": \"done\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/v1/tasks/18",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "tasks",
+            "18"
+          ]
+        }
+      },
+      "response": [
+        {
+          "error": {
+            "code": "FORBIDDEN",
+            "message": "Kamu tidak memiliki izin untuk mengakses task ini."
+          }
+        }
+      ]
+    },
+    {
+      "name": "PATCH - tasksEditadmin",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3ODIyMDM1MzksImV4cCI6MTc4MjIwNDQzOSwianRpIjoiZjQ4MzRiYmItNjVlOS00NTNlLThhMWUtYzIxZGJmMTY0Y2VjIn0.Lr8SGplomV-M0XbpyrsTx8Txrj9P2t2ed7PQn0YZ6QA",
+            "type": "text"
+          }
+        ]
+      },
+      "response": [
+        {
+          "data": {
+            "id": 18,
+            "title": "Meeting tim desain",
+            "description": null,
+            "status": "DONE",
+            "priority": "MEDIUM",
+            "dueDate": null,
+            "createdAt": "2026-06-23T06:41:12.437Z",
+            "updatedAt": "2026-06-23T08:33:33.002Z",
+            "userId": 8,
+            "categoryId": 11,
+            "user": {
+              "id": 8,
+              "name": "Siti Rahayu",
+              "email": "siti@example.com"
+            },
+            "category": {
+              "id": 11,
+              "name": "Pekerjaan",
+              "color": "#F59E0B"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - bruteForceloginTest",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": [
+        {
+          "error": {
+            "code": "TOO_MANY_ATTEMPTS",
+            "message": "Terlalu banyak percobaan login. Tunggu 15 menit."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "supabase_service_role_api_key_06vx",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_0brd",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_01rq",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_08vk",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_08vk",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_0s7l",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_00c2",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_13l6",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_0kmr",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_13l6",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_02ft",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_0swc",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0odf",
+      "secret": true
+    }
+  ]
+}

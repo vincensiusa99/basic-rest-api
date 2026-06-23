@@ -39,7 +39,7 @@ function getRefreshTokenExpiry() {
 }
 
 const authService = {
-    
+
     // ─── REGISTER ──────────────────────────────────────────
     async register({ name, email, password }) {
         // 1. Cek apakah email sudah terdaftar
@@ -50,10 +50,10 @@ const authService = {
             err.code = 'DUPLICATE_EMAIL';
             throw err;
         }
-        
+
         // 2. Hash password dengan argon2id
         const hashedPassword = await argon2.hash(password, ARGON2_OPTIONS);
-        
+
         // 3. Simpan user baru ke database
         const user = await prisma.user.create({
             data: { name, email, password: hashedPassword },
@@ -62,12 +62,12 @@ const authService = {
 
         return user;
     },
-    
+
     // ─── LOGIN ─────────────────────────────────────────────
     async login({ email, password }) {
         // 1. Cari user by email (termasuk password untuk verifikasi)
         const user = await userRepo.findByEmail(email);
-        
+
         // 2. Jika user tidak ada — gunakan pesan generik untuk mencegah user
         if (!user) {
             const err = new Error('Email atau password salah.');
@@ -75,7 +75,7 @@ const authService = {
             err.code = 'INVALID_CREDENTIALS';
             throw err;
         }
-        
+
         // 3. Verifikasi password dengan argon2
         const isValid = await argon2.verify(user.password, password);
         if (!isValid) {
@@ -84,30 +84,31 @@ const authService = {
             err.code = 'INVALID_CREDENTIALS';
             throw err;
         }
-        
+
         // 4. Buat access token (short-lived: 15 menit)
         const accessToken = signAccessToken({
             userId: user.id,
             email: user.email,
+            role: user.role,
         });
-        
+
         // 5. Buat refresh token (long-lived: 7 hari)
         const refreshToken = signRefreshToken({ userId: user.id });
-        
+
         // 6. Simpan refresh token ke database
         await refreshTokenRepo.create({
             token: refreshToken,
             userId: user.id,
             expiresAt: getRefreshTokenExpiry(),
         });
-        
+
         return {
             user: { id: user.id, name: user.name, email: user.email },
             accessToken,
             refreshToken,
         };
     },
-    
+
     // ─── REFRESH TOKEN ─────────────────────────────────────
     async refresh(tokenString) {
         // 1. Verifikasi JWT signature dan expiry
@@ -116,20 +117,20 @@ const authService = {
             payload = jwt.verify(tokenString, config.jwt.refreshSecret);
         } catch (e) {
             const err = new Error('Refresh token tidak valid atau sudah expired.');
-err.statusCode = 401; err.code = 'INVALID_REFRESH_TOKEN';
+            err.statusCode = 401; err.code = 'INVALID_REFRESH_TOKEN';
             throw err;
         }
-        
+
         // 2. Cek apakah token ada dan valid di database
         const storedToken = await refreshTokenRepo.findByToken(tokenString);
-        
+
         // 3. REUSE DETECTION: token ada di DB tapi sudah di-revoke!
         // Ini tanda ada penyerang yang menggunakan token lama.
         if (storedToken && storedToken.isRevoked) {
             // Revoke SEMUA token milik user ini sebagai tindakan pencegahan
             await refreshTokenRepo.revokeAllByUser(storedToken.userId);
             const err = new Error('Token mencurigakan terdeteksi. Silakan login ulang.');
-err.statusCode = 401; err.code = 'TOKEN_REUSE_DETECTED';
+            err.statusCode = 401; err.code = 'TOKEN_REUSE_DETECTED';
             throw err;
         }
 
@@ -139,10 +140,10 @@ err.statusCode = 401; err.code = 'TOKEN_REUSE_DETECTED';
             err.statusCode = 401; err.code = 'INVALID_REFRESH_TOKEN';
             throw err;
         }
-        
+
         // 5. ROTATION: Revoke token lama
         await refreshTokenRepo.revoke(tokenString);
-        
+
         // 6. Buat token baru
         const newAccessToken = signAccessToken({
             userId: storedToken.userId,
@@ -151,14 +152,14 @@ err.statusCode = 401; err.code = 'TOKEN_REUSE_DETECTED';
         const newRefreshToken = signRefreshToken({
             userId: storedToken.userId
         });
-        
+
         // 7. Simpan refresh token baru
         await refreshTokenRepo.create({
             token: newRefreshToken,
             userId: storedToken.userId,
             expiresAt: getRefreshTokenExpiry(),
         });
-        
+
         return { accessToken: newAccessToken, refreshToken: newRefreshToken };
     },
     // ─── LOGOUT ────────────────────────────────────────────

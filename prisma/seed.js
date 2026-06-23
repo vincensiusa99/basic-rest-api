@@ -1,4 +1,5 @@
 // File: prisma/seed.js
+const argon2 = require('argon2');
 const { PrismaClient } = require('@prisma/client');
 const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
 const { hostname, port, username, password, pathname } = new
@@ -26,19 +27,30 @@ async function main() {
     ]);
     console.log(' ✓ 3 kategori dibuat');
     // ─── Buat Users ───────────────────────────────────────
-    // CATATAN: password di-seed sebagai plain text.
-    // Di aplikasi nyata, password WAJIB di-hash (Minggu 6: bcrypt/argon2).
-    const [budi, siti] = await Promise.all([
+    // Hash semua password dengan argon2id sebelum disimpan ke DB
+    const ARGON2_OPTIONS = { memoryCost: 65536, timeCost: 3, parallelism: 4 };
+    const [hashBudi, hashSiti, hashAdmin] = await Promise.all([
+        argon2.hash('Budi123!', ARGON2_OPTIONS),
+        argon2.hash('Siti123!', ARGON2_OPTIONS),
+        argon2.hash('Admin123!', ARGON2_OPTIONS),
+    ]);
+    const [budi, siti, admin] = await Promise.all([
         prisma.user.create({
             data: {
                 name: 'Budi Santoso', email: 'budi@example.com',
-                password: 'hashed_later'
+                password: hashBudi, role: 'USER'
             }
         }),
         prisma.user.create({
             data: {
                 name: 'Siti Rahayu', email: 'siti@example.com',
-                password: 'hashed_later'
+                password: hashSiti, role: 'USER'
+            }
+        }),
+        prisma.user.create({
+            data: {
+                name: 'Admin', email: 'admin@example.com',
+                password: hashAdmin, role: 'ADMIN'
             }
         }),
     ]);
@@ -88,36 +100,46 @@ async function main() {
 
     // ─── Buat Activity Logs ─────────────────────────────────
     await Promise.all([
-        prisma.activityLog.create({ data: {
-            taskId: task1.id,
-            userId: budi.id,
-            action: 'CREATED',
-            changes: { title: 'Setup Express server', status: 'DONE' },
-        } }),
-        prisma.activityLog.create({ data: {
-            taskId: task2.id,
-            userId: budi.id,
-            action: 'CREATED',
-            changes: { title: 'Belajar REST API', priority: 'HIGH' },
-        } }),
-        prisma.activityLog.create({ data: {
-            taskId: task3.id,
-            userId: budi.id,
-            action: 'UPDATED',
-            changes: { status: 'IN_PROGRESS', description: 'Menggunakan Prisma ORM' },
-        } }),
-        prisma.activityLog.create({ data: {
-            taskId: task4.id,
-            userId: budi.id,
-            action: 'CREATED',
-            changes: { title: 'Belajar Prisma ORM', priority: 'MEDIUM' },
-        } }),
-        prisma.activityLog.create({ data: {
-            taskId: task5.id,
-            userId: siti.id,
-            action: 'UPDATED',
-            changes: { status: 'TODO', priority: 'LOW' },
-        } }),
+        prisma.activityLog.create({
+            data: {
+                taskId: task1.id,
+                userId: budi.id,
+                action: 'CREATED',
+                changes: { title: 'Setup Express server', status: 'DONE' },
+            }
+        }),
+        prisma.activityLog.create({
+            data: {
+                taskId: task2.id,
+                userId: budi.id,
+                action: 'CREATED',
+                changes: { title: 'Belajar REST API', priority: 'HIGH' },
+            }
+        }),
+        prisma.activityLog.create({
+            data: {
+                taskId: task3.id,
+                userId: budi.id,
+                action: 'UPDATED',
+                changes: { status: 'IN_PROGRESS', description: 'Menggunakan Prisma ORM' },
+            }
+        }),
+        prisma.activityLog.create({
+            data: {
+                taskId: task4.id,
+                userId: budi.id,
+                action: 'CREATED',
+                changes: { title: 'Belajar Prisma ORM', priority: 'MEDIUM' },
+            }
+        }),
+        prisma.activityLog.create({
+            data: {
+                taskId: task5.id,
+                userId: siti.id,
+                action: 'UPDATED',
+                changes: { status: 'TODO', priority: 'LOW' },
+            }
+        }),
     ]);
     console.log(' ✓ 5 activity log dibuat');
     console.log(' ✓ 6 task dibuat');
