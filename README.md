@@ -6,7 +6,7 @@
 2. Clone atau salin repositori ini ke mesin Anda.
 3. Masuk ke folder proyek:
    ```bash
-   cd c:/srccode/basic-rest-api
+   cd basic-rest-api
    ```
 4. Install dependency:
    ```bash
@@ -22,9 +22,11 @@
    JWT_REFRESH_EXPIRES_IN=7d
    APP_NAME=basic-rest-api
    APP_VERSION=1.0.0
+   ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3001
    ```
    > Jika menggunakan MySQL di XAMPP dan port default tidak 3306, sesuaikan `DATABASE_URL` dengan port yang benar.
    > **Catatan**: Jika terjadi error koneksi database terkait *public key retrieval* atau autentikasi, tambahkan parameter `?allowPublicKeyRetrieval=true` di akhir URL.
+   > **Socket.IO CORS**: Variabel `ALLOWED_ORIGINS` (pisahkan dengan koma) mengontrol origin mana yang diizinkan terhubung ke Socket.IO. Jika tidak di-set, default ke `http://localhost:5173` dan `http://localhost:3001`.
 6. Jalankan migrasi Prisma:
    ```bash
    npx prisma migrate deploy
@@ -71,15 +73,18 @@ basic-rest-api/
 │       └── 20260616120000_add_activity_log/
 │           └── migration.sql
 └── src/
-    ├── index.js
+    ├── index.js          ← Entry point; membungkus Express dengan http.Server untuk Socket.IO
+    ├── socket.js         ← Socket.IO handler (auth middleware, room, events)
     ├── config/
     │   ├── index.js
-    │   └── prisma.js
+    │   ├── cors.js
+    │   ├── prisma.js
+    │   └── rateLimiter.js
     ├── controllers/
     │   ├── activityLog.controller.js
     │   ├── auth.controller.js
     │   ├── healthController.js
-    │   └── tasks.controller.js
+    │   └── tasks.controller.js   ← Emit real-time events setelah CRUD task
     ├── data/
     │   └── tasks.store.js
     ├── docs/
@@ -94,6 +99,7 @@ basic-rest-api/
     │   └── user.repository.js
     ├── routes/
     │   ├── activityLog.routes.js
+    │   ├── admin.routes.js
     │   ├── auth.routes.js
     │   ├── index.js
     │   ├── tasks.routes.js
@@ -130,11 +136,11 @@ basic-rest-api/
 
 #### Tasks
 - `GET /api/v1/tasks` — daftar task milik user yang login dengan pagination, filter, sort
-- `POST /api/v1/tasks` — buat task baru
+- `POST /api/v1/tasks` — buat task baru *(mengemit event `task:created` & notifikasi personal via Socket.IO)*
 - `GET /api/v1/tasks/:id` — detail task berdasarkan ID
 - `PUT /api/v1/tasks/:id` — ganti seluruh data task
-- `PATCH /api/v1/tasks/:id` — perbarui sebagian task
-- `DELETE /api/v1/tasks/:id` — hapus task
+- `PATCH /api/v1/tasks/:id` — perbarui sebagian task *(mengemit event `task:updated` & notifikasi personal via Socket.IO)*
+- `DELETE /api/v1/tasks/:id` — hapus task *(mengemit event `task:deleted` via Socket.IO)*
 - `GET /api/v1/tasks/:id/activity` — daftar activity log untuk task
 
 #### Activity Logs
@@ -158,7 +164,49 @@ basic-rest-api/
 - `GET /api/docs`
 - `GET /api/docs.json`
 
-## 4. ERD Database
+## 4. Komunikasi Real-Time (Socket.IO)
+
+Sejak branch `feat/realtime-websocket`, server menggunakan **Socket.IO v4** yang dibungkus di atas HTTP server (`http.createServer(app)`). Koneksi WebSocket memerlukan autentikasi JWT yang sama dengan REST API.
+
+### Arsitektur
+
+```
+Express App
+    └── http.createServer(app)
+            └── Socket.IO Server
+                    ├── Auth Middleware (verifikasi JWT dari socket.handshake.auth.token)
+                    └── Rooms
+                        ├── tasks:global  ← semua user yang terautentikasi
+                        └── user:{userId} ← room privat per user
+```
+
+### Events yang Dikirim Server → Klien
+
+| Event | Room | Payload | Deskripsi |
+|---|---|---|---|
+| `task:created` | `tasks:global` | `{ task }` | Task baru berhasil dibuat |
+| `task:updated` | `tasks:global` | `{ task }` | Task diperbarui (PATCH) |
+| `task:deleted` | `tasks:global` | `{ taskId }` | Task dihapus |
+| `notification` | `user:{userId}` | `{ type, title, message }` | Notifikasi personal (SUCCESS / INFO) |
+| `users:online` | semua | `{ count }` | Jumlah koneksi aktif |
+
+### Cara Koneksi dari Klien
+
+```js
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:5000", {
+    auth: { token: "<access_token>" },
+    transports: ["websocket", "polling"],
+});
+
+socket.on("task:created", ({ task }) => { /* update list */ });
+socket.on("notification",  (notif)  => { /* tampilkan toast */ });
+```
+
+> **Catatan**: Koneksi ke Socket.IO harus langsung ke port backend (`5000`), bukan melalui proxy Vite.
+
+## 5. ERD Database
 
 ### Entitas utama
 
@@ -222,4 +270,3 @@ basic-rest-api/
 - `Priority`: `LOW`, `MEDIUM`, `HIGH`
 - `ActivityAction`: `CREATED`, `UPDATED`, `DELETED`
 - `Role`: `USER`, `ADMIN`
-
