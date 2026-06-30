@@ -1,11 +1,12 @@
-// File: src/index.js — versi lengkap dengan semua security middleware
-const config = require('./config');
-const express = require('express');
-const helmet = require('helmet');
+// File: src/index.js — versi final dengan Socket.IO
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const helmet = require("helmet");
 const cors = require('cors');
-const corsOptions = require('./config/cors');
-const { apiLimiter, authLimiter, sensitiveLimiter } =
-    require('./config/rateLimiter');
+const corsOptions = require("./config/cors");
+const { apiLimiter, authLimiter, sensitiveLimiter } = require('./config/rateLimiter');
+const config = require('./config');
 
 // Routes
 const routes = require('./routes');
@@ -20,6 +21,24 @@ const authenticate = require('./middleware/authenticate');
 const setupSwagger = require('./docs/swagger');
 
 const app = express();
+const server = http.createServer(app); // ← HTTP server membungkus Express
+
+// ── SOCKET.IO SERVER ──────────────────────────────────────
+const io = new Server(server, {
+    cors: {
+        // Izinkan origin Vite dev server dan origin lain yang diizinkan
+        origin: process.env.ALLOWED_ORIGINS
+            ? process.env.ALLOWED_ORIGINS.split(',')
+            : ['http://localhost:5173', 'http://localhost:3001'],
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
+    pingTimeout: 60000,
+    pingInterval: 25000,
+});
+
+// Ekspos io agar bisa diakses dari controller
+app.set("io", io);
 
 // ─── 1. Security Headers (Helmet) ──────────────────────
 // Harus dipasang PALING AWAL sebelum middleware lain
@@ -64,6 +83,9 @@ app.use('/api/v1/activity-logs', activityLogRoutes);
 
 // ─── 7. Swagger UI ───────────────────────────────────
 setupSwagger(app);
+
+// ─── 8. Socket.IO Handler ────────────────────────────
+require('./socket')(io); // load socket handler
 
 // ─── 8. 404 Handler ──────────────────────────────────
 app.use((req, res) => {
@@ -119,7 +141,8 @@ app.use((err, req, res, next) => {
 });
 
 // ─── Start Server ────────────────────────────────────────────
-app.listen(config.port, () => {
+// PENTING: gunakan server.listen(), BUKAN app.listen()
+server.listen(config.port, () => {
     console.log('─'.repeat(55));
     console.log(` ${config.appName} v${config.version}`);
     console.log(` Environment : ${config.env}`);
@@ -127,7 +150,8 @@ app.listen(config.port, () => {
     console.log(` Server      : http://localhost:${config.port}`);
     console.log(` Docs        : http://localhost:${config.port}/api/docs`);
     console.log(` Security    : Helmet [OK] CORS [OK] Rate Limit [OK]`);
+    console.log(` Socket.IO   : Siap`);
     console.log('─'.repeat(55));
 });
 
-module.exports = app;
+module.exports = { app, server };
