@@ -1,0 +1,40 @@
+name: Deploy Backend to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Backend Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            echo '=== Starting Backend Deployment ==='
+            cd /home/deploy-vincen/backend
+            
+            echo '--- Pulling latest code ---'
+            git pull origin main
+            
+            echo '--- Installing dependencies ---'
+            npm install --omit=dev
+            
+            echo '--- Generating Prisma Client ---'
+            npx prisma generate
+            
+            echo '--- Restarting PM2 ---'
+            pm2 restart backend
+            
+            echo '=== Backend Deployment Complete ==='
+            pm2 list
