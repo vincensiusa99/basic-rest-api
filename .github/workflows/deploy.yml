@@ -21,6 +21,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            # 1. Panggil NVM/Node.js secara manual agar robot GitHub bisa melihat npm & pm2
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
             echo '=== Starting Backend Deployment ==='
             cd /home/deploy-vincen/backend
             
